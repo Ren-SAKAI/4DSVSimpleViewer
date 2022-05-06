@@ -20,7 +20,7 @@ int main( int argc, char** argv )
     kvs::Vec3i position{0,0,0};
     float frame_rate{0};
     kvs::FileList files{};
-    bool m_loop = false; // added
+    bool m_loop = false;
 
     // Functions
     auto Read = [&] ( const std::string filename )
@@ -256,4 +256,5 @@ int main( int argc, char** argv )
     std::cout << object->currentFrameIndex() << std::endl;
 
     return app.run();
+    
 }
