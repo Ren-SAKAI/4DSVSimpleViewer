@@ -77,7 +77,7 @@ $ git clone https://github.com/vizlab-kobe/4DStreetViewMovieViewer.git
 1.　GitHubよりSimpleViewerをインストールする
 ```
 $ cd ~/Work/　　（インストールしたいディレクトリに移動する）
-$ git clone https://github.com/vizlab-kobe/4DStreetViewMovieViewer.git
+$ git clone https://github.com/Ren-SAKAI/4DSVSimpleViewer.git
 ```
 
 2.　コンパイルする
