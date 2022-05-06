@@ -168,7 +168,6 @@ int main( int argc, char** argv )
             position += kvs::Vec3i{ +1, 0, 0 };
             position.x() = kvs::Math::Min( position.x(), dimension.x() - 1 );
             ReplaceObject();
-            std::cout << "change the position" << std::endl;
             break;
         }
         case kvs::Key::Up:
