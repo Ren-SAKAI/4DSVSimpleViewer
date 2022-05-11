@@ -1,5 +1,7 @@
 # 4DStreetView SimpleViewerのインストールと実行方法
 
+このドキュメントでは、MacOS12.1以上を対象として方法を記述する。
+
 ## STEP1: KVSのインストール
 
 1.　必要なパッケージをインストールする
@@ -24,10 +26,10 @@ export KVS_FFMPEG_DIR=/opt/homebrew/opt/ffmpeg   (M1 Macの場合)
 
 4.　GitHubよりKVSをダウンロードする
 ```
-$ cd ~/Donwload
+$ cd ~/Downloads
 $ git clone https://github.com/naohisas/KVS.git
 ```
-※　上の例では「~/Download」にソースコードをダウンロード（gitクローン）している。ダウンロードするディレクトリはどこでも良いが、環境変数KVS_DIR（インストールターゲット）で指定したディレクトリとは別にするほうが良い。
+※　上の例では「~/Downloads」にソースコードをダウンロード（gitクローン）している。ダウンロードするディレクトリはどこでも良いが、環境変数KVS_DIR（インストールターゲット）で指定したディレクトリとは別にするほうが良い。
 
 5.　kvs.confを編集して、FFmpegを有効化する
 ```
@@ -43,8 +45,8 @@ KVS_ENABLE_OPENMP     = 0
 KVS_ENABLE_DEPRECATED = 0
 
 KVS_SUPPORT_CUDA      = 0
-KVS_SUPPORT_GLUT      = 0
-KVS_SUPPORT_GLFW      = 1
+KVS_SUPPORT_GLUT      = 1
+KVS_SUPPORT_GLFW      = 0
 KVS_SUPPORT_FFMPEG    = 1    <---「1」にする
 KVS_SUPPORT_OPENCV    = 0
 KVS_SUPPORT_QT        = 0
@@ -69,7 +71,7 @@ $ kvscheck -version
 ## STEP2: SimpleViewer用のサンプルデータをダウンロード
 ```
 $ cd ~/Download　　（インストールしたいディレクトリに移動する）
-$ git clone https://github.com/vizlab-kobe/4DStreetViewMovieViewer.git
+$ git clone https://github.com/vizlab-kobe/4DSVTestData.git
 ```
 ## STEP3: SimpleViewerのインストール
 ※ 以下では、~/Workディレクトリにインストールする場合の手順を説明する。
@@ -107,5 +109,5 @@ $ vi conf.4dsv  （以下の仕様に従い編集する）
 ```
 3.　実行する
 ```
-$ ./SimpleViewer conf.4dsv
+$ ./4DSVSimpleViewer conf.4dsv
 ```
