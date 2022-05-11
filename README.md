@@ -70,7 +70,7 @@ $ kvscheck -version
 
 ## STEP2: SimpleViewer用のサンプルデータをダウンロード
 ```
-$ cd ~/Download　　（インストールしたいディレクトリに移動する）
+$ cd ~/Downloads　　（インストールしたいディレクトリに移動する）
 $ git clone https://github.com/vizlab-kobe/4DSVTestData.git
 ```
 ## STEP3: SimpleViewerのインストール
