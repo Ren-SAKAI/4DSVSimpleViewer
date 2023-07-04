@@ -147,11 +147,16 @@ int main( int argc, char** argv )
         auto ReplaceObject = [&] ()
         {
             auto index = Object::DownCast( screen.scene()->object( "Object" ) )->currentFrameIndex();
+            std::cout << "index: " << index << std::endl;
             auto* o = new Object( File() );
+            std::cout << "filename: " << files[ Index() ].fileName() << std::endl;
             o->setName( "Object" );
             o->jumpToFrame( index );
+            std::cout << "a" << std::endl;
             screen.scene()->replaceObject( "Object", o );
+            std::cout << "b" << std::endl;
             object = o;
+            screen.redraw(); kvs::OpenGL::Flush();
         };
 
         switch ( e->key() )
@@ -196,6 +201,7 @@ int main( int argc, char** argv )
         }
         case kvs::Key::Period:
         {
+            std::cout << "change the position" << std::endl;
             position += kvs::Vec3i{ 0, 0, +1 };
             position.z() = kvs::Math::Min( position.z(), dimension.z() - 1 );
             ReplaceObject();
@@ -230,7 +236,7 @@ int main( int argc, char** argv )
 
 
 
-        if ( !object->isLastFrame() ) { screen.redraw(); kvs::OpenGL::Flush(); }
+        if ( !object->isLastFrame() ) { /* screen.redraw(); kvs::OpenGL::Flush(); */ }
         else
         {
             if ( m_loop )
@@ -247,6 +253,7 @@ int main( int argc, char** argv )
             slider.setValue( index );
             slider.setCaption( "Frame: " + frame );
             screen.redraw();
+            kvs::OpenGL::Flush();
         }
     }, interval );
     screen.addEvent( &event );
