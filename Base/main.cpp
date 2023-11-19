@@ -89,10 +89,13 @@ int main( int argc, char** argv )
     object->setName( "Object" );
     screen.create();
 
+    bool isPlay = false;
+    bool isPlayPrevious = false;
+
     kvs::CheckBox loop( &screen );
     loop.setCaption( "Loop play" );
     loop.anchorToTopRight();
-    loop.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::White() } );
+    loop.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::Black() } );
     loop.setMargin( 15 );
     loop.setState( m_loop );
     loop.stateChanged( [&] () { m_loop = loop.state(); } );
@@ -100,7 +103,7 @@ int main( int argc, char** argv )
 
     kvs::Label label( &screen );
     label.anchorToTopLeft();
-    label.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::White() } );
+    label.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::Black() } );
     label.screenUpdated( [&]()
     {
         auto index = Object::DownCast( screen.scene()->object( "Object" ) )->currentFrameIndex();
@@ -114,7 +117,7 @@ int main( int argc, char** argv )
 
     kvs::Slider slider( &screen );
     slider.anchorToBottomRight();
-    slider.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::White() } );
+    slider.setFont( { kvs::Font::Sans, 18, kvs::RGBColor::Black() } );
     slider.setCaption( "Frame: " + kvs::String::From( 0, 6, '0' ) );
     slider.setRange( 0, object->numberOfFrames() - 1 );
     slider.setValue( 0 );
@@ -128,13 +131,15 @@ int main( int argc, char** argv )
     slider.sliderPressed( [&]()
     {
         renderer->pause();
+        isPlayPrevious = isPlay;
+        isPlay = false;
     } );
     slider.sliderReleased( [&]()
     {
         auto index = kvs::Math::Round( slider.value() );
         auto* o = Object::DownCast( screen.scene()->object( "Object" ) );
         o->jumpToFrame( index );
-        renderer->play();
+        isPlay = isPlayPrevious;
         screen.redraw();
         renderer->pause();
     } );
@@ -147,14 +152,10 @@ int main( int argc, char** argv )
         auto ReplaceObject = [&] ()
         {
             auto index = Object::DownCast( screen.scene()->object( "Object" ) )->currentFrameIndex();
-            std::cout << "index: " << index << std::endl;
             auto* o = new Object( File() );
-            std::cout << "filename: " << files[ Index() ].fileName() << std::endl;
             o->setName( "Object" );
             o->jumpToFrame( index );
-            std::cout << "a" << std::endl;
             screen.scene()->replaceObject( "Object", o );
-            std::cout << "b" << std::endl;
             object = o;
             screen.redraw(); kvs::OpenGL::Flush();
         };
@@ -215,17 +216,14 @@ int main( int argc, char** argv )
             break;
         }
 
-        //  追加するべき機能
-        //  ・逆再生
-
         // up to here (*1)
 
         case kvs::Key::s: { renderer->stop(); break; }
         case kvs::Key::Space:
         {
-            if ( renderer->isPaused() ) { renderer->play(); }
-            else if ( renderer->isPlaying() ) { renderer->pause(); }
-            else { renderer->play(); }
+            isPlay = !isPlay;
+            if ( isPlay && object->isLastFrame() )
+            { object->jumpToFrame( 0 ); }
             break;
         }
         default: break;
@@ -233,29 +231,27 @@ int main( int argc, char** argv )
     } );
     event.timerEvent( [&] ( kvs::TimeEvent* e )
     {
-
-
-
-        if ( !object->isLastFrame() ) { /* screen.redraw(); kvs::OpenGL::Flush(); */ }
+        if ( !object->isLastFrame() ) {  screen.redraw(); kvs::OpenGL::Flush();  }
         else
         {
             if ( m_loop )
             {
                 object->jumpToFrame( 0 );
-                renderer->play();
+                isPlay = true;
             }
         }
 
-        if ( renderer->isPlaying() )
+        if ( isPlay )
         {
             auto index = Object::DownCast( screen.scene()->object( "Object" ) )->currentFrameIndex();
             auto frame = kvs::String::From( index, 6, '0' );
             slider.setValue( index );
             slider.setCaption( "Frame: " + frame );
-            screen.redraw();
-            kvs::OpenGL::Flush();
+            object->jumpToNextFrame();
         }
     }, interval );
+
+
     screen.addEvent( &event );
 
     screen.registerObject( object, renderer );
