@@ -65,8 +65,10 @@ int main( int argc, char** argv )
         const auto& pos = position;
         // return pos.x() + dim.x() * pos.y() + dim.x() * dim.y() * pos.z();
         auto idx_pos = pos.x() + dim.x() * pos.y() + dim.x() * dim.y() * pos.z();
+        auto dim_pos = dim.x() * dim.y() * dim.z();
         // w component is level of isosurface
-        auto idx = idx_pos * dim.w() + pos.w();
+        // TODO: indexを正しく実装する
+        auto idx = dim_pos * pos.w() + idx_pos;
         return idx;
     };
 
